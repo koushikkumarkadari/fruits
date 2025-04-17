@@ -1,0 +1,155 @@
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext/AuthContext';
+
+const TrackOrder = () => {
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState('');
+  const { user, loading } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to login if not authenticated and not loading
+    if (!loading && !user) {
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    // Fetch orders based on user role
+    if (user) {
+      const fetchOrders = async () => {
+        try {
+          const endpoint = user.isAdmin ? '/admin/orders' : '/user/orders';
+          const res = await axios.get(`http://localhost:5000${endpoint}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          });
+          setOrders(res.data);
+          setError('');
+        } catch (err) {
+          console.error(err);
+          setError(err.response?.data?.message || 'Failed to fetch orders.');
+        }
+      };
+      fetchOrders();
+    }
+  }, [user]);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await axios.patch(
+        `http://localhost:5000/admin/orders/${orderId}`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      setError('Failed to update order status.');
+    }
+  };
+
+  // Render nothing while loading to prevent flicker
+  if (loading) {
+    return null;
+  }
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        {user?.isAdmin ? 'All Orders (Admin View)' : 'Your Orders'}
+      </h1>
+
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
+      {orders.length === 0 && !error && (
+        <p className="text-gray-600 text-center">
+          {user?.isAdmin ? 'No orders in the system.' : 'You have no orders.'}
+        </p>
+      )}
+
+      <div className="space-y-6">
+        {orders.map((order) => (
+          <div
+            key={order._id}
+            className="bg-white shadow-md rounded-lg p-6 border border-gray-200 space-y-4"
+          >
+            <h2 className="text-2xl font-semibold text-gray-700">
+              Order ID: {order._id}
+            </h2>
+            {user?.isAdmin && (
+              <p>
+                <span className="font-medium text-gray-600">Placed by:</span>{' '}
+                {order.user?.email || 'Unknown User'}
+              </p>
+            )}
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium text-gray-600">Items:</h3>
+              {order.items && order.items.length > 0 ? (
+                <ul className="list-disc pl-5">
+                  {order.items.map((item, index) => (
+                    <li key={index} className="text-gray-700">
+                      {item.product?.name || 'Unknown Product'} ({item.quantity} kg)
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">No items in this order.</p>
+              )}
+            </div>
+            <p>
+              <span className="font-medium text-gray-600">Buyer:</span>{' '}
+              {order.buyerName}
+            </p>
+            <p>
+              <span className="font-medium text-gray-600">Contact:</span>{' '}
+              {order.contact}
+            </p>
+            <p>
+              <span className="font-medium text-gray-600">Address:</span>{' '}
+              {order.address}
+            </p>
+            <p>
+              <span className="font-medium text-gray-600">Status:</span>
+              {user?.isAdmin ? (
+                <select
+                  value={order.status}
+                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                  className="ml-2 px-2 py-1 text-sm rounded border border-gray-300"
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="In transit">In transit</option>
+                  <option value="Out for delivery">Out for delivery</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Returned">Returned</option>
+                  <option value="Failed">Failed</option>
+                </select>
+              ) : (
+                <span
+                  className={`ml-2 px-2 py-1 text-sm rounded ${
+                    order.status === 'Delivered'
+                      ? 'bg-green-100 text-green-700'
+                      : order.status === 'Pending'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-blue-100 text-blue-700'
+                  }`}
+                >
+                  {order.status}
+                </span>
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default TrackOrder;
