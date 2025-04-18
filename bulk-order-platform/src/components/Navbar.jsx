@@ -12,11 +12,11 @@ const Navbar = () => {
           FarmerGram
         </Link>
         <div className="space-x-6">
-        {user && !user.isAdmin && (<Link to="/" className="hover:text-gray-300 transition">
+        <Link to="/" className="hover:text-gray-300 transition">
             Home
-          </Link> )}
+          </Link> 
           {user && !user.isAdmin && (<Link to="/order" className="hover:text-gray-300 transition">
-            Orders
+            Order here
           </Link> )}
           {user && (<Link to="/track-order" className="hover:text-gray-300 transition">
             Track Order

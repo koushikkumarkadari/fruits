@@ -5,7 +5,7 @@ import { AuthContext } from '../AuthContext/AuthContext';
 
 const InventoryManager = () => {
   const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({ name: '', pricePerUnit: '' });
+  const [form, setForm] = useState({ name: '', pricePerUnit: '', type: '' });
   const [error, setError] = useState('');
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -40,11 +40,14 @@ const InventoryManager = () => {
 
   const addProduct = async () => {
     try {
+      if (!form.name || !form.pricePerUnit || !form.type) {
+        setError('All fields are required.');
+        return;
+      }
       await axios.post('http://localhost:5000/products', form, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      console.log(form)
-      setForm({ name: '',  pricePerUnit: '' });
+      setForm({ name: '', pricePerUnit: '', type: '' });
       setError('');
       fetchProducts();
     } catch (err) {
@@ -94,7 +97,7 @@ const InventoryManager = () => {
 
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
-      <div className="flex flex-col md:flex-row items-center gap-4 mb-8 bg-white shadow-md rounded-lg p-4">
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-8 bg-white shadow-md rounded-lg p-4 size-fit">
         <input
           type="text"
           name="name"
@@ -111,6 +114,16 @@ const InventoryManager = () => {
           onChange={handleInputChange}
           className="border border-gray-300 rounded px-4 py-2 w-full md:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <select
+          name="type"
+          value={form.type}
+          onChange={handleInputChange}
+          className="border border-gray-300 rounded px-4 py-2 w-full md:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">-- Select Type --</option>
+          <option value="Fruit">Fruit</option>
+          <option value="Vegetable">Vegetable</option>
+        </select>
         <button
           onClick={addProduct}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded transition"
@@ -128,6 +141,7 @@ const InventoryManager = () => {
             <div>
               <p className="text-lg font-medium text-gray-700">{product.name}</p>
               <p className="text-sm text-gray-500">₹{product.pricePerUnit}/kg</p>
+              <p className="text-sm text-gray-500">Type: {product.type}</p>
             </div>
             <div className="flex gap-2">
               <button
@@ -140,8 +154,9 @@ const InventoryManager = () => {
                 onClick={() => {
                   const newName = prompt('New name:', product.name);
                   const newPrice = prompt('New price:', product.pricePerUnit);
-                  if (newName && newPrice) {
-                    editProduct(product._id, { name: newName, pricePerUnit: newPrice });
+                  const newType = prompt('New type (Fruit/Vegetable):', product.type);
+                  if (newName && newPrice && newType) {
+                    editProduct(product._id, { name: newName, pricePerUnit: newPrice, type: newType });
                   }
                 }}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition"

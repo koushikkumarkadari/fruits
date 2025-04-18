@@ -56,9 +56,21 @@ const TrackOrder = () => {
     }
   };
 
-  // Render nothing while loading to prevent flicker
+  // Calculate the total price for each order
+  const calculateOrderTotal = (items) => {
+    return items.reduce((total, item) => {
+      return total + (item.product?.pricePerUnit || 0) * item.quantity;
+    }, 0);
+  };
+
+  // Calculate the aggregated total price for all orders
+  const aggregatedTotal = orders.reduce((total, order) => {
+    return total + calculateOrderTotal(order.items);
+  }, 0);
+
+  // Render loader while loading
   if (loading) {
-    return null;
+    return <p>Loading...</p>;
   }
 
   return (
@@ -76,77 +88,84 @@ const TrackOrder = () => {
       )}
 
       <div className="space-y-6">
-        {orders.map((order) => (
-          <div
-            key={order._id}
-            className="bg-white shadow-md rounded-lg p-6 border border-gray-200 space-y-4"
-          >
-            <h2 className="text-2xl font-semibold text-gray-700">
-              Order ID: {order._id}
-            </h2>
-            {user?.isAdmin && (
+        {orders.map((order) => {
+          const orderTotal = calculateOrderTotal(order.items);
+          return (
+            <div
+              key={order._id}
+              className="bg-white shadow-md rounded-lg p-6 border border-gray-200 space-y-4"
+            >
+              <h2 className="text-2xl font-semibold text-gray-700">
+                Order ID: {order._id}
+              </h2>
+              {user?.isAdmin && (
+                <p>
+                  <span className="font-medium text-gray-600">Placed by:</span>{' '}
+                  {order.user?.email || 'Unknown User'}
+                </p>
+              )}
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium text-gray-600">Items:</h3>
+                {order.items && order.items.length > 0 ? (
+                  <ul className="list-disc pl-5">
+                    {order.items.map((item, index) => (
+                      <li key={index} className="text-gray-700">
+                        {item.product?.name || 'Unknown Product'} ({item.quantity} kg) - ₹
+                        {item.product?.pricePerUnit || 0} per kg
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">No items in this order.</p>
+                )}
+              </div>
               <p>
-                <span className="font-medium text-gray-600">Placed by:</span>{' '}
-                {order.user?.email || 'Unknown User'}
+                <span className="font-medium text-gray-600">Buyer:</span>{' '}
+                {order.buyerName}
               </p>
-            )}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium text-gray-600">Items:</h3>
-              {order.items && order.items.length > 0 ? (
-                <ul className="list-disc pl-5">
-                  {order.items.map((item, index) => (
-                    <li key={index} className="text-gray-700">
-                      {item.product?.name || 'Unknown Product'} ({item.quantity} kg)
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500">No items in this order.</p>
-              )}
+              <p>
+                <span className="font-medium text-gray-600">Contact:</span>{' '}
+                {order.contact}
+              </p>
+              <p>
+                <span className="font-medium text-gray-600">Address:</span>{' '}
+                {order.address}
+              </p>
+              <p>
+                <span className="font-medium text-gray-600">Status:</span>
+                {user?.isAdmin ? (
+                  <select
+                    value={order.status}
+                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                    className="ml-2 px-2 py-1 text-sm rounded border border-gray-300"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="In transit">In transit</option>
+                    <option value="Out for delivery">Out for delivery</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Returned">Returned</option>
+                    <option value="Failed">Failed</option>
+                  </select>
+                ) : (
+                  <span
+                    className={`ml-2 px-2 py-1 text-sm rounded ${
+                      order.status === 'Delivered'
+                        ? 'bg-green-100 text-green-700'
+                        : order.status === 'Pending'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-blue-100 text-blue-700'
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                )}
+              </p>
+              <p className="font-medium text-gray-600">
+                Total Price: ₹{orderTotal.toFixed(2)}
+              </p>
             </div>
-            <p>
-              <span className="font-medium text-gray-600">Buyer:</span>{' '}
-              {order.buyerName}
-            </p>
-            <p>
-              <span className="font-medium text-gray-600">Contact:</span>{' '}
-              {order.contact}
-            </p>
-            <p>
-              <span className="font-medium text-gray-600">Address:</span>{' '}
-              {order.address}
-            </p>
-            <p>
-              <span className="font-medium text-gray-600">Status:</span>
-              {user?.isAdmin ? (
-                <select
-                  value={order.status}
-                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                  className="ml-2 px-2 py-1 text-sm rounded border border-gray-300"
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="In transit">In transit</option>
-                  <option value="Out for delivery">Out for delivery</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Returned">Returned</option>
-                  <option value="Failed">Failed</option>
-                </select>
-              ) : (
-                <span
-                  className={`ml-2 px-2 py-1 text-sm rounded ${
-                    order.status === 'Delivered'
-                      ? 'bg-green-100 text-green-700'
-                      : order.status === 'Pending'
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}
-                >
-                  {order.status}
-                </span>
-              )}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

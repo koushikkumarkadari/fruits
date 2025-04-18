@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext/AuthContext';
 
 const Catalogue = () => {
-  const [products, setProducts] = useState([]);
+  const [fruits, setFruits] = useState([]);
+  const [vegetables, setVegetables] = useState([]);
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -16,11 +17,16 @@ const Catalogue = () => {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    // Fetch products only if authenticated
+    // Fetch products and segregate them
     if (user) {
       axios
         .get('http://localhost:5000/products')
-        .then((res) => setProducts(res.data))
+        .then((res) => {
+          const fruits = res.data.filter((product) => product.type === 'Fruit');
+          const vegetables = res.data.filter((product) => product.type === 'Vegetable');
+          setFruits(fruits);
+          setVegetables(vegetables);
+        })
         .catch((err) => console.error(err));
     }
   }, [user]);
@@ -33,18 +39,25 @@ const Catalogue = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Product Catalogue</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {products.map((product) => (
-          <div key={product._id} className="p-4 border rounded-lg shadow">
-            <h2 className="text-xl font-semibold">{product.name}</h2>
-            <p className="text-gray-600">Price per unit: ₹{product.pricePerUnit}</p>
+
+      <h2 className="text-xl font-semibold mb-2">Fruits</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {fruits.map((fruit) => (
+          <div key={fruit._id} className="p-4 border rounded-lg shadow">
+            <h3 className="text-lg font-semibold">{fruit.name}</h3>
+            <p className="text-gray-600">Price per unit: ₹{fruit.pricePerUnit}</p>
           </div>
         ))}
       </div>
-      <div className="mt-6">
-        <Link to="/order" className="text-blue-600 underline">
-          Place a Bulk Order
-        </Link>
+
+      <h2 className="text-xl font-semibold mb-2">Vegetables</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {vegetables.map((vegetable) => (
+          <div key={vegetable._id} className="p-4 border rounded-lg shadow">
+            <h3 className="text-lg font-semibold">{vegetable.name}</h3>
+            <p className="text-gray-600">Price per unit: ₹{vegetable.pricePerUnit}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

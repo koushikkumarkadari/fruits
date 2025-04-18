@@ -57,6 +57,14 @@ const OrderForm = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const calculateCartValue = () => {
+    return items.reduce((total, item) => {
+      const product = products.find((p) => p._id === item.product);
+      const price = product ? product.pricePerUnit : 0;
+      return total + price * (item.quantity || 0);
+    }, 0);
+  };
+
   const handleSubmit = async () => {
     setError('');
     // Validate items
@@ -153,6 +161,11 @@ const OrderForm = () => {
           >
             Add Another Product
           </button>
+        </div>
+
+        {/* Cart Value */}
+        <div className="text-right text-lg font-semibold text-gray-700">
+          Total Cart Value: ₹{calculateCartValue().toFixed(2)}
         </div>
 
         {/* Buyer Details Section */}
