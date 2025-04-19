@@ -24,7 +24,7 @@ const InventoryManager = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/products', {
+      const res = await axios.get('https://fruits-server.onrender.com/products', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setProducts(res.data);
@@ -44,7 +44,7 @@ const InventoryManager = () => {
         setError('All fields are required.');
         return;
       }
-      await axios.post('http://localhost:5000/products', form, {
+      await axios.post('https://fruits-server.onrender.com/products', form, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setForm({ name: '', pricePerUnit: '', type: '' });
@@ -58,7 +58,7 @@ const InventoryManager = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/products/${id}`, {
+      await axios.delete(`https://fruits-server.onrender.com/products/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       fetchProducts();
@@ -70,7 +70,7 @@ const InventoryManager = () => {
 
   const editProduct = async (id, updatedProduct) => {
     try {
-      await axios.put(`http://localhost:5000/products/${id}`, updatedProduct, {
+      await axios.put(`https://fruits-server.onrender.com/products/${id}`, updatedProduct, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       fetchProducts();

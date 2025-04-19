@@ -22,7 +22,7 @@ const TrackOrder = () => {
       const fetchOrders = async () => {
         try {
           const endpoint = user.isAdmin ? '/admin/orders' : '/user/orders';
-          const res = await axios.get(`http://localhost:5000${endpoint}`, {
+          const res = await axios.get(`https://fruits-server.onrender.com${endpoint}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
           });
           setOrders(res.data);
@@ -39,7 +39,7 @@ const TrackOrder = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await axios.patch(
-        `http://localhost:5000/admin/orders/${orderId}`,
+        `https://fruits-server.onrender.com/admin/orders/${orderId}`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

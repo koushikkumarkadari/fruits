@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       axios
-        .get('http://localhost:5000/profile', {
+        .get('https://fruits-server.onrender.com/profile', {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post('http://localhost:5000/login', { email, password });
+    const res = await axios.post('https://fruits-server.onrender.com/login', { email, password });
     localStorage.setItem('token', res.data.token);
     setUser({ token: res.data.token, isAdmin: res.data.isAdmin });
   };
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     if (!password || password.length < 6) {
       throw new Error("Password must be at least 6 characters long.");
     }
-    await axios.post('http://localhost:5000/register', { email, password });
+    await axios.post('https://fruits-server.onrender.com/register', { email, password });
   };
 
   const logout = () => {

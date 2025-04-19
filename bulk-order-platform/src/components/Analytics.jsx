@@ -8,7 +8,7 @@ const Analytics = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/admin/analytics', {
+        const res = await axios.get('https://fruits-server.onrender.com/admin/analytics', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setAnalyticsData(res.data);

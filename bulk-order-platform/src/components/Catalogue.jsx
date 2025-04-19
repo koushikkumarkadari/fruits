@@ -20,7 +20,7 @@ const Catalogue = () => {
     // Fetch products and segregate them
     if (user) {
       axios
-        .get('http://localhost:5000/products')
+        .get('https://fruits-server.onrender.com/products')
         .then((res) => {
           const fruits = res.data.filter((product) => product.type === 'Fruit');
           const vegetables = res.data.filter((product) => product.type === 'Vegetable');

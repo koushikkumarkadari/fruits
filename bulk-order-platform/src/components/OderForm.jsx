@@ -26,7 +26,7 @@ const OrderForm = () => {
     // Fetch products only if authenticated
     if (user) {
       axios
-        .get('http://localhost:5000/products')
+        .get('https://fruits-server.onrender.com/products')
         .then((res) => setProducts(res.data))
         .catch((err) => {
           console.error(err);
@@ -82,7 +82,7 @@ const OrderForm = () => {
 
     try {
       await axios.post(
-        'http://localhost:5000/orders',
+        'https://fruits-server.onrender.com/orders',
         {
           items: items.map((item) => ({
             productId: item.product,
