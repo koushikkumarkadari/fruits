@@ -1,17 +1,454 @@
-# Fruits Repository
+Bulk Ordering Platform
 
-Welcome to the **Fruits Repository**! This project is focused on working with JavaScript, CSS, and HTML to build engaging and interactive applications.
+A full-stack MERN application for bulk ordering of fruits and vegetables, featuring user registration, order placement, admin order tracking, and email notifications.
 
-## Project Structure
+Table of Contents
 
-The repository is composed of:
 
-- **JavaScript (97.2%)**: The main logic and functionality of the project.
-- **CSS (2%)**: Styling and layout.
-- **HTML (0.8%)**: Markup structure for the application.
 
-## How to Get Started
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/koushikkumarkadari/fruits.git
+
+Overview
+
+
+
+Features
+
+
+
+Technologies
+
+
+
+Project Structure
+
+
+
+Setup Instructions
+
+
+
+Deployment
+
+
+
+Usage
+
+
+
+Contributing
+
+
+
+License
+
+Overview
+
+The Bulk Ordering Platform allows users to register, place bulk orders for fruits and vegetables, and track their orders. Admins can manage products and monitor all orders. The application includes email notifications for order confirmations and is built with a modular backend and a responsive frontend.
+
+Features
+
+
+
+
+
+User Authentication: Register and login with email and password (validated with regex).
+
+
+
+Order Placement: Users can place bulk orders with multiple items.
+
+
+
+Order Tracking: Users view their orders; admins view all orders with status updates.
+
+
+
+Email Notifications: Users receive confirmation emails with order details upon placement.
+
+
+
+Admin Dashboard: Admins can add/edit/delete products and update order statuses.
+
+
+
+Analytics: Admins can view order statistics (total, delivered, pending, failed).
+
+
+
+Responsive UI: Built with Tailwind CSS for a modern, mobile-friendly interface.
+
+Technologies
+
+
+
+
+
+Frontend: React, Vite, React Router, Tailwind CSS, Axios
+
+
+
+Backend: Node.js, Express, MongoDB, Mongoose, JWT, Bcrypt
+
+
+
+Email: Nodemailer (Gmail SMTP)
+
+
+
+Deployment: Vercel (frontend), Vercel or other platforms (backend)
+
+
+
+Others: dotenv, CORS
+
+Project Structure
+
+project/
+├── frontend/                    # React frontend
+│   ├── src/
+│   │   ├── Register.jsx        # User registration component
+│   │   ├── TrackOrder.jsx      # Order tracking component
+│   │   ├── OrderForm.jsx       # Order placement component
+│   │   ├── AuthContext.jsx     # Authentication context
+│   │   ├── App.jsx             # Main app with routing
+│   ├── vercel.json             # Vercel routing configuration
+│   ├── .env.production         # Frontend environment variables
+│   ├── .gitignore              # Git ignore for frontend
+├── server/                     # Express backend
+│   ├── models/                 # Mongoose schemas
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   ├── Order.js
+│   ├── controllers/            # Business logic
+│   │   ├── authController.js
+│   │   ├── productController.js
+│   │   ├── orderController.js
+│   │   ├── analyticsController.js
+│   ├── routes/                 # Express routes
+│   │   ├── authRoutes.js
+│   │   ├── productRoutes.js
+│   │   ├── orderRoutes.js
+│   │   ├── analyticsRoutes.js
+│   ├── server.js               # Backend entry point
+│   ├── .env                   # Backend environment variables (ignored)
+│   ├── .env.example           # Template for .env
+├── .gitignore                 # Root-level Git ignore
+├── README.md                  # Project documentation
+
+Setup Instructions
+
+Prerequisites
+
+
+
+
+
+Node.js (v16 or higher)
+
+
+
+MongoDB (local or cloud, e.g., MongoDB Atlas)
+
+
+
+Git
+
+
+
+Gmail account with App Password for email notifications
+
+Clone the Repository
+
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+
+Backend Setup
+
+
+
+
+
+Navigate to the server directory:
+
+cd server
+
+
+
+Install dependencies:
+
+npm install
+
+
+
+Create a .env file in server/ based on .env.example:
+
+MONGO_URI=your-mongodb-uri
+JWT_SECRET=your-jwt-secret
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-gmail-app-password
+
+
+
+
+
+MongoDB URI: Use MongoDB Atlas or local MongoDB.
+
+
+
+JWT_SECRET: A secure random string.
+
+
+
+EMAIL_USER/PASS: Gmail address and App Password (generate from Google Account > Security > App Passwords).
+
+
+
+Start the backend:
+
+npm start
+
+
+
+
+
+The server runs on http://localhost:5000.
+
+Frontend Setup
+
+
+
+
+
+Navigate to the frontend directory:
+
+cd frontend
+
+
+
+Install dependencies:
+
+npm install
+
+
+
+Create a .env.production file in frontend/ for the backend API URL:
+
+REACT_APP_API_URL=http://localhost:5000
+
+
+
+
+
+Update to the deployed backend URL in production.
+
+
+
+Start the frontend:
+
+npm run dev
+
+
+
+
+
+The app runs on http://localhost:5173.
+
+Verify Setup
+
+
+
+
+
+Visit http://localhost:5173/register to access the registration page.
+
+
+
+Register a user, place an order, and check for email notifications.
+
+
+
+Log in as an admin to view all orders at http://localhost:5173/track-order.
+
+Deployment
+
+Frontend (Vercel)
+
+
+
+
+
+Push the repository to GitHub.
+
+
+
+In Vercel Dashboard:
+
+
+
+
+
+Create a new project and link to your repository.
+
+
+
+Set Root Directory to frontend/.
+
+
+
+Configure build settings:
+
+
+
+
+
+Framework Preset: Vite
+
+
+
+Build Command: npm run build
+
+
+
+Output Directory: dist
+
+
+
+Install Command: npm install
+
+
+
+Add environment variable: REACT_APP_API_URL=https://your-backend-url.
+
+
+
+Deploy the project. The app will be available at https://yourapp.vercel.app.
+
+
+
+Ensure frontend/vercel.json handles client-side routes:
+
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://your-backend-url/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
+Backend (Vercel or Other)
+
+
+
+
+
+Deploy the backend to Vercel:
+
+
+
+
+
+Create a new Vercel project for server/.
+
+
+
+Set Root Directory to server/.
+
+
+
+Add environment variables: MONGO_URI, JWT_SECRET, EMAIL_USER, EMAIL_PASS.
+
+
+
+Deploy to get a URL (e.g., https://yourapp-api.vercel.app).
+
+
+
+Alternatively, use platforms like Railway or Heroku:
+
+
+
+
+
+Configure server.js as the entry point.
+
+
+
+Set environment variables in the platform’s dashboard.
+
+
+
+Update frontend/.env.production with the backend URL:
+
+REACT_APP_API_URL=https://yourapp-api.vercel.app
+
+Usage
+
+
+
+
+
+Register: Go to /register, enter a valid email and password (min 6 characters).
+
+
+
+Login: Log in at /login to access order placement and tracking.
+
+
+
+Place Orders: Use /order to add products (fruits/vegetables) and submit orders.
+
+
+
+Track Orders: View your orders at /track-order. Admins can view all orders and update statuses.
+
+
+
+Admin Tasks:
+
+
+
+
+
+Add/edit/delete products via API (e.g., POST /products).
+
+
+
+View analytics at /admin/analytics.
+
+
+
+Email Notifications: Receive order confirmation emails with details (order ID, items, status).
+
+Contributing
+
+
+
+
+
+Fork the repository.
+
+
+
+Create a feature branch (git checkout -b feature/your-feature).
+
+
+
+Commit changes (git commit -m "Add your feature").
+
+
+
+Push to the branch (git push origin feature/your-feature).
+
+
+
+Open a Pull Request.
+
+License
+
+MIT License. See LICENSE for details.
