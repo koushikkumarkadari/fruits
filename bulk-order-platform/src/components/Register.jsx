@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { AuthContext } from '../AuthContext/AuthContext';
 
 // Email validation regex
@@ -80,9 +80,9 @@ const Register = () => {
         </button>
         <p className="text-center">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-600 underline">
+          <Link to="/login" className="text-blue-600 underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

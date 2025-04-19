@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext} from '../AuthContext/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -52,9 +53,9 @@ const Login = () => {
         </button>
         <p className="text-center">
           Don't have an account?{' '}
-          <a href="/register" className="text-blue-600 underline">
+          <Link to="/register" className="text-blue-600 underline">
             Register
-          </a>
+          </Link>
         </p>
       </div>
     </div>
