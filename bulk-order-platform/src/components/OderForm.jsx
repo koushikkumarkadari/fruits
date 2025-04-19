@@ -120,7 +120,7 @@ const OrderForm = () => {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-700">Select Products</h2>
           {items.map((item, index) => (
-            <div key={index} className="flex flex-col md:flex-row gap-4 items-center">
+            <div key={index} className="flex flex-col md:flex-row gap-4 justify-end ">
               <div className="flex-1">
                 <label className="block text-gray-600">Product</label>
                 <select
@@ -148,7 +148,7 @@ const OrderForm = () => {
               </div>
               <button
                 onClick={() => removeItem(index)}
-                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded mt-6 md:mt-0"
+                className=" bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded mt-6 md:mt-0"
                 disabled={items.length === 1}
               >
                 Remove
@@ -157,7 +157,7 @@ const OrderForm = () => {
           ))}
           <button
             onClick={addItem}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full"
           >
             Add Another Product
           </button>

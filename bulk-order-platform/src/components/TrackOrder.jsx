@@ -95,17 +95,17 @@ const TrackOrder = () => {
               key={order._id}
               className="bg-white shadow-md rounded-lg p-6 border border-gray-200 space-y-4"
             >
-              <h2 className="text-2xl font-semibold text-gray-700">
+              <h2 className="md:text-2xl font-semibold text-gray-700">
                 Order ID: {order._id}
               </h2>
               {user?.isAdmin && (
-                <p>
-                  <span className="font-medium text-gray-600">Placed by:</span>{' '}
+                <p className='text-sm md:text-lg'>
+                  <span className="text-sm md:text-lg font-medium text-gray-600">Placed by:</span>{' '}
                   {order.user?.email || 'Unknown User'}
                 </p>
               )}
               <div className="space-y-2">
-                <h3 className="text-lg font-medium text-gray-600">Items:</h3>
+                <h3 className="text-sm md:text-lg font-medium text-gray-600">Items:</h3>
                 {order.items && order.items.length > 0 ? (
                   <ul className="list-disc pl-5">
                     {order.items.map((item, index) => (
@@ -119,20 +119,20 @@ const TrackOrder = () => {
                   <p className="text-gray-500">No items in this order.</p>
                 )}
               </div>
-              <p>
-                <span className="font-medium text-gray-600">Buyer:</span>{' '}
+              <p className='text-sm md:text-lg'>
+                <span className="text-sm md:text-lg font-medium text-gray-600">Buyer:</span>{' '}
                 {order.buyerName}
               </p>
-              <p>
-                <span className="font-medium text-gray-600">Contact:</span>{' '}
+              <p className='text-sm md:text-lg'>
+                <span className="text-sm md:text-lg font-medium text-gray-600">Contact:</span>{' '}
                 {order.contact}
               </p>
-              <p>
-                <span className="font-medium text-gray-600">Address:</span>{' '}
+              <p  className='text-sm md:text-lg'>
+                <span className="text-sm md:text-lg font-medium text-gray-600">Address:</span>{' '}
                 {order.address}
               </p>
-              <p>
-                <span className="font-medium text-gray-600">Status:</span>
+              <p className='text-sm md:text-lg'>
+                <span className="text-sm md:text-lg font-medium text-gray-600">Status:</span>
                 {user?.isAdmin ? (
                   <select
                     value={order.status}
@@ -160,7 +160,7 @@ const TrackOrder = () => {
                   </span>
                 )}
               </p>
-              <p className="font-medium text-gray-600">
+              <p className="text-sm md:text-lg font-medium text-gray-600">
                 Total Price: ₹{orderTotal.toFixed(2)}
               </p>
             </div>
