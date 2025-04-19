@@ -56,6 +56,18 @@ const TrackOrder = () => {
     }
   };
 
+  const handleCancelOrder = async (orderId) => {
+    try {
+      await axios.delete(`https://fruits-server.onrender.com/user/orders/${orderId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+    } catch (err) {
+      console.error(err);
+      setError('Failed to cancel the order.');
+    }
+  };
+
   // Calculate the total price for each order
   const calculateOrderTotal = (items) => {
     return items.reduce((total, item) => {
@@ -83,7 +95,11 @@ const TrackOrder = () => {
 
       {orders.length === 0 && !error && (
         <div className="flex flex-row justify-center text-gray-600 text-center h-screen items-center">
-          {user?.isAdmin ? <p className="text-gray-600 text-center">'No orders in the system.'</p> : <img alt='You have no orders.' src="https://s6.gifyu.com/images/bpc41.gif" />}
+          {user?.isAdmin ? (
+            <p className="text-gray-600 text-center">'No orders in the system.'</p>
+          ) : (
+            <img alt="You have no orders." src="https://s6.gifyu.com/images/bpc41.gif" />
+          )}
         </div>
       )}
 
@@ -99,8 +115,10 @@ const TrackOrder = () => {
                 Order ID: {order._id}
               </h2>
               {user?.isAdmin && (
-                <p className='text-sm md:text-lg'>
-                  <span className="text-sm md:text-lg font-medium text-gray-600">Placed by:</span>{' '}
+                <p className="text-sm md:text-lg">
+                  <span className="text-sm md:text-lg font-medium text-gray-600">
+                    Placed by:
+                  </span>{' '}
                   {order.user?.email || 'Unknown User'}
                 </p>
               )}
@@ -119,19 +137,19 @@ const TrackOrder = () => {
                   <p className="text-gray-500">No items in this order.</p>
                 )}
               </div>
-              <p className='text-sm md:text-lg'>
+              <p className="text-sm md:text-lg">
                 <span className="text-sm md:text-lg font-medium text-gray-600">Buyer:</span>{' '}
                 {order.buyerName}
               </p>
-              <p className='text-sm md:text-lg'>
+              <p className="text-sm md:text-lg">
                 <span className="text-sm md:text-lg font-medium text-gray-600">Contact:</span>{' '}
                 {order.contact}
               </p>
-              <p  className='text-sm md:text-lg'>
+              <p className="text-sm md:text-lg">
                 <span className="text-sm md:text-lg font-medium text-gray-600">Address:</span>{' '}
                 {order.address}
               </p>
-              <p className='text-sm md:text-lg'>
+              <p className="text-sm md:text-lg">
                 <span className="text-sm md:text-lg font-medium text-gray-600">Status:</span>
                 {user?.isAdmin ? (
                   <select
@@ -163,6 +181,15 @@ const TrackOrder = () => {
               <p className="text-sm md:text-lg font-medium text-gray-600">
                 Total Price: ₹{orderTotal.toFixed(2)}
               </p>
+              {/* Cancel Order Button */}
+              {!user?.isAdmin && order.status === 'Pending' && (
+                <button
+                  onClick={() => handleCancelOrder(order._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                >
+                  Cancel Order
+                </button>
+              )}
             </div>
           );
         })}
