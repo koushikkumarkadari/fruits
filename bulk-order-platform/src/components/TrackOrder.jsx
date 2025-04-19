@@ -82,9 +82,9 @@ const TrackOrder = () => {
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
       {orders.length === 0 && !error && (
-        <p className="text-gray-600 text-center">
-          {user?.isAdmin ? 'No orders in the system.' : 'You have no orders.'}
-        </p>
+        <div className="flex flex-row justify-center text-gray-600 text-center h-screen items-center">
+          {user?.isAdmin ? <p className="text-gray-600 text-center">'No orders in the system.'</p> : <img alt='You have no orders.' src="https://i.ibb.co/kVk1bjPd/empty-basket-full-apples-illustration-260nw-347005994-removebg-preview.png" />}
+        </div>
       )}
 
       <div className="space-y-6">
