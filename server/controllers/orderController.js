@@ -156,24 +156,41 @@ const updateOrderStatus = async (req, res) => {
 const deleteOrderById = async (req, res) => {
   try {
     const { id } = req.params;
-    const order = await Order.findById(id);
 
+    // Validate ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid order ID' });
+    }
+
+    // Find order and populate user for email
+    const order = await Order.findById(id).populate('user');
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    if (order.status !== 'Pending') {
-      return res.status(400).json({ message: 'Only pending orders can be canceled.' });
+    // Check if user is authorized
+    if (order.user._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Unauthorized' });
     }
 
-    await order.remove();
-    res.json({ message: 'Order canceled successfully.' });
+    // Check if order is pending
+    if (order.status !== 'Pending') {
+      return res.status(400).json({ message: 'Only pending orders can be canceled' });
+    }
+
+    // Delete order and update user's orders array
+    await Order.findByIdAndDelete(id);
+    await User.findByIdAndUpdate(order.user._id, { $pull: { orders: id } });
+
+    // Send cancellation email
+    await sendOrderCancellationEmail(order, order.user);
+
+    res.status(200).json({ message: 'Order canceled successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Failed to cancel order.' });
+    res.status(500).json({ message: 'Failed to cancel order' });
   }
-}
-
+};
 module.exports = {
   createOrder,
   getOrderById,
