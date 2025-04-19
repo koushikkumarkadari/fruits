@@ -49,6 +49,28 @@ const sendOrderConfirmationEmail = async (order, user) => {
     // Do not throw error to avoid blocking order creation
   }
 };
+// Function to send order cancellation email
+const sendOrderCancellationEmail = async (order, user) => {
+  try {
+    const mailOptions = {
+      from: `"Bulk Ordering Platform" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: `Order Cancellation - Order #${order._id}`,
+      html: `
+        <h2>Order Cancellation</h2>
+        <p>Dear ${order.buyerName},</p>
+        <p>Your order #${order._id} has been canceled.</p>
+        <p>If you have any questions, please contact support.</p>
+        <p>Best regards,<br/>Bulk Ordering Platform Team</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Cancellation email sent to ${user.email} for order ${order._id}`);
+  } catch (err) {
+    console.error(`Failed to send cancellation email for order ${order._id}:`, err);
+  }
+};
 
 const createOrder = async (req, res) => {
   try {
