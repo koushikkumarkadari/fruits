@@ -3,16 +3,6 @@ A full-stack MERN application for bulk ordering of fruits and vegetables, featur
 Table of Contents
 
 Overview
-Features
-Technologies
-Project Structure
-Setup Instructions
-Deployment
-Usage
-Contributing
-License
-
-Overview
 The Bulk Ordering Platform allows users to register, place bulk orders for fruits and vegetables, and track their orders. Admins can manage products and monitor all orders. The application includes email notifications for order confirmations and is built with a modular backend and a responsive frontend.
 Features
 
@@ -29,41 +19,8 @@ Technologies
 Frontend: React, Vite, React Router, Tailwind CSS, Axios
 Backend: Node.js, Express, MongoDB, Mongoose, JWT, Bcrypt
 Email: Nodemailer (Gmail SMTP)
-Deployment: Vercel (frontend), Vercel or other platforms (backend)
+Deployment: render (frontend), render (backend)
 Others: dotenv, CORS
-
-Project Structure
-project/
-├── frontend/                    # React frontend
-│   ├── src/
-│   │   ├── Register.jsx        # User registration component
-│   │   ├── TrackOrder.jsx      # Order tracking component
-│   │   ├── OrderForm.jsx       # Order placement component
-│   │   ├── AuthContext.jsx     # Authentication context
-│   │   ├── App.jsx             # Main app with routing
-│   ├── vercel.json             # Vercel routing configuration
-│   ├── .env.production         # Frontend environment variables
-│   ├── .gitignore              # Git ignore for frontend
-├── server/                     # Express backend
-│   ├── models/                 # Mongoose schemas
-│   │   ├── User.js
-│   │   ├── Product.js
-│   │   ├── Order.js
-│   ├── controllers/            # Business logic
-│   │   ├── authController.js
-│   │   ├── productController.js
-│   │   ├── orderController.js
-│   │   ├── analyticsController.js
-│   ├── routes/                 # Express routes
-│   │   ├── authRoutes.js
-│   │   ├── productRoutes.js
-│   │   ├── orderRoutes.js
-│   │   ├── analyticsRoutes.js
-│   ├── server.js               # Backend entry point
-│   ├── .env                   # Backend environment variables (ignored)
-│   ├── .env.example           # Template for .env
-├── .gitignore                 # Root-level Git ignore
-├── README.md                  # Project documentation
 
 Setup Instructions
 Prerequisites
@@ -74,7 +31,7 @@ Git
 Gmail account with App Password for email notifications
 
 Clone the Repository
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/koushikkumarkadari/fruits.git
 cd your-repo
 
 Backend Setup
@@ -103,7 +60,7 @@ Start the backend:
 npm start
 
 
-The server runs on http://localhost:5000.
+The server runs on https://fruits-server.onrender.com
 
 
 
@@ -117,84 +74,11 @@ Install dependencies:
 npm install
 
 
-Create a .env.production file in frontend/ for the backend API URL:
-REACT_APP_API_URL=http://localhost:5000
-
-
-Update to the deployed backend URL in production.
-
-
 Start the frontend:
 npm run dev
 
 
-The app runs on http://localhost:5173.
-
-
-
-Verify Setup
-
-Visit http://localhost:5173/register to access the registration page.
-Register a user, place an order, and check for email notifications.
-Log in as an admin to view all orders at http://localhost:5173/track-order.
-
-Deployment
-Frontend (Vercel)
-
-Push the repository to GitHub.
-
-In Vercel Dashboard:
-
-Create a new project and link to your repository.
-Set Root Directory to frontend/.
-Configure build settings:
-Framework Preset: Vite
-Build Command: npm run build
-Output Directory: dist
-Install Command: npm install
-
-
-Add environment variable: REACT_APP_API_URL=https://your-backend-url.
-
-
-Deploy the project. The app will be available at https://yourapp.vercel.app.
-
-Ensure frontend/vercel.json handles client-side routes:
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://your-backend-url/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
-}
-
-
-
-Backend (Vercel or Other)
-
-Deploy the backend to Vercel:
-
-Create a new Vercel project for server/.
-Set Root Directory to server/.
-Add environment variables: MONGO_URI, JWT_SECRET, EMAIL_USER, EMAIL_PASS.
-Deploy to get a URL (e.g., https://yourapp-api.vercel.app).
-
-
-Alternatively, use platforms like Railway or Heroku:
-
-Configure server.js as the entry point.
-Set environment variables in the platform’s dashboard.
-
-
-Update frontend/.env.production with the backend URL:
-REACT_APP_API_URL=https://yourapp-api.vercel.app
-
-
+The app runs on https://fruits-9c69.onrender.com/
 
 Usage
 
