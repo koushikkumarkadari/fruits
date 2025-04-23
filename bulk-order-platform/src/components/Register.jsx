@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import { AuthContext } from '../AuthContext/AuthContext';
+import {ClimbingBoxLoader} from "react-spinners";
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -9,11 +10,13 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading,setLoading]=useState(false);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError(''); // Clear previous errors
     try {
       // Client-side validation
@@ -37,6 +40,7 @@ const Register = () => {
       console.error(err);
       setError(err.message || 'Registration failed.');
     }
+    setLoading(false);
   };
 
   return (
@@ -72,12 +76,22 @@ const Register = () => {
             required
           />
         </div>
-        <button
+        {!loading&&<button
           onClick={handleSubmit}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded transition"
         >
           Register
-        </button>
+        </button>}
+        {loading&&<button
+              
+              className="w-full  text-white font-semibold px-4 py-2 rounded transition"
+            >
+              <ClimbingBoxLoader
+            color="#36d7b7"
+            size={15}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          /></button>}
         <p className="text-center">
           Already have an account?{' '}
           <Link to="/login" className="text-blue-600 underline">

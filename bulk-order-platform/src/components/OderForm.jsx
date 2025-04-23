@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext/AuthContext';
+import { ClimbingBoxLoader } from "react-spinners";
 
 const OrderForm = () => {
   const [products, setProducts] = useState([]);
@@ -106,7 +107,17 @@ const OrderForm = () => {
 
   // Render nothing while loading to prevent flicker
   if (loading) {
-    return null;
+    return (
+      <button
+        className="w-full  text-white font-semibold px-4 py-2 rounded transition"
+      >
+        <ClimbingBoxLoader
+          color="#36d7b7"
+          size={15}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        /></button>
+    );
   }
 
   return (

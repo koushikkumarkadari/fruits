@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext/AuthContext';
 import Analytics from './Analytics';
+import {ClimbingBoxLoader} from "react-spinners";
 
 const AdminDashboard = () => {
   const { user, loading } = useContext(AuthContext);
@@ -16,7 +17,16 @@ const AdminDashboard = () => {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return <p className="text-center text-gray-500">Loading...</p>;
+    return <button
+              
+    className="w-full  text-white font-semibold px-4 py-2 rounded transition"
+  >
+    <ClimbingBoxLoader
+  color="#36d7b7"
+  size={15}
+  aria-label="Loading Spinner"
+  data-testid="loader"
+/></button>;
   }
 
   return (

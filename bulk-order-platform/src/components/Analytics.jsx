@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { ClimbingBoxLoader } from "react-spinners";
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
   const [error, setError] = useState('');
@@ -27,7 +27,16 @@ const Analytics = () => {
   }
 
   if (!analyticsData) {
-    return <p className="text-gray-500 text-center">Loading analytics...</p>;
+    return <button
+              
+              className="w-full  text-white font-semibold px-4 py-2 rounded transition"
+            >
+              <ClimbingBoxLoader
+            color="#36d7b7"
+            size={15}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          /></button>;
   }
 
   return (
