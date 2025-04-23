@@ -14,6 +14,7 @@ const Login = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
     try {
       if (!email || !password) {
         setError('Please provide both email and password.');
