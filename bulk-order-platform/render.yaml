@@ -1,0 +1,11 @@
+services:
+  - type: static
+    name: frontend
+    env: static
+    repo: https://github.com/your-username/your-repo
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
