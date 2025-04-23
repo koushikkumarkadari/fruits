@@ -11,17 +11,31 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
+      if (!email || !password) {
+        setError('Please provide both email and password.');
+        return;
+      }
+      if (!emailRegex.test(email)) {
+        setError("Invalid email format. Email must include '@' and a valid domain (e.g., user@example.com).");
+        return;
+      }
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long.');
+        return;
+      }
+      setLoading(true);
       await login(email, password);
       navigate('/');
     } catch (err) {
       setError('Invalid credentials');
     }
-    setLoading(false);
+    finally {
+      setLoading(false); // Reset loading state
+    }
   };
 
   return (

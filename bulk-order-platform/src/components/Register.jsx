@@ -16,7 +16,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(''); // Clear previous errors
     try {
       // Client-side validation
@@ -32,7 +31,7 @@ const Register = () => {
         setError('Password must be at least 6 characters long.');
         return;
       }
-
+      setLoading(true);
       await register(email, password);
       alert('Registration successful! Please log in.');
       navigate('/login');
@@ -40,7 +39,9 @@ const Register = () => {
       console.error(err);
       setError(err.message || 'Registration failed.');
     }
-    setLoading(false);
+    finally {
+      setLoading(false); // Reset loading state
+    }
   };
 
   return (
