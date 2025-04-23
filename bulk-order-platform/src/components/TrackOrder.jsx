@@ -106,7 +106,7 @@ const TrackOrder = () => {
       {orders.length === 0 && !error && (
         <div className="flex flex-row justify-center text-gray-600 text-center h-screen items-center">
           {user?.isAdmin ? (
-            <p className="text-gray-600 text-center">'No orders in the system.'</p>
+            <img alt="You have no orders." src="https://s6.gifyu.com/images/bpc41.gif" />
           ) : (
             <img alt="You have no orders." src="https://s6.gifyu.com/images/bpc41.gif" />
           )}
