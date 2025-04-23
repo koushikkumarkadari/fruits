@@ -78,7 +78,7 @@ Start the frontend:
 npm run dev
 
 
-The app runs on https://fruits-9c69.onrender.com/
+The app runs on https://fruits-kappa-blush.vercel.app/
 
 Usage
 
